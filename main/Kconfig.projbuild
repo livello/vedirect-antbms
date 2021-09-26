@@ -1,0 +1,53 @@
+menu "Wifi Configuration"
+
+    config ESP_WIFI_SSID
+        string "WiFi SSID"
+        default "myssid"
+        help
+            SSID (network name) for logger to connect to.
+
+    config ESP_WIFI_PASSWORD
+        string "WiFi Password"
+        default "mypassword"
+        help
+            WiFi password (WPA or WPA2) for the logger to use.
+
+    config ESP_MAXIMUM_RETRY
+        int "Maximum retry"
+        default 5
+        help
+            Set the Maximum retry to avoid station reconnecting to the AP unlimited when the AP is really inexistent.
+            
+    config ESP_WIFI_HOSTNAME
+        string "Hostname"
+        default "ve-ant-monitor"
+        help
+            Hostname of the WiFi Client.
+endmenu
+
+menu "EmonCMS Configuration"
+
+    config EMONCMS_HOSTNAME
+        string "Server Hostname"
+        default "emoncms.org"
+        help
+            The server hostname to make the requests.
+
+    config EMONCMS_PATH
+        string "EmonCMS post path"
+        default "/input/post"
+        help
+            The path to post the Emoncms Data.
+
+    config EMONCMS_PORT
+        string "Port"
+        default "443"
+        help
+            The EmonCMS web endpoint.
+
+    config EMONCMS_API_KEY
+        string "API Key"
+        default "123456789abcdef"
+        help
+            Your EmonCMS API Key.
+endmenu
