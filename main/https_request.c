@@ -36,7 +36,7 @@ static const char *TAG = "REQ";
 
 static const char *REQUEST = "POST https://" WEB_SERVER WEB_URL " HTTP/1.0\r\n"
     "Host: "WEB_SERVER"\r\n"
-    "User-Agent: " ESP_WIFI_HOSTNAME "/1.0 esp32\r\n"
+    "User-Agent: " CONFIG_ESP_WIFI_HOSTNAME "/1.0 esp32\r\n"
     "\r\n";
 
 
