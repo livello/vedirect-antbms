@@ -6,6 +6,8 @@
 #include "nvs_flash.h"
 #include "wifi.h"
 #include "https_request.h"
+#include "emoncms_request.h"
+#include "serial.h"
 
 
 void app_main(void)
@@ -18,5 +20,19 @@ void app_main(void)
     ESP_ERROR_CHECK(ret);
     
     wifi_init();
-    xTaskCreate(https_get_task, "https_get_task", 8192, NULL, 5, NULL);
+
+    bool mppt1=true;
+
+    xTaskCreate(serial_read_task, "serial_task", 8192, &mppt1, tskIDLE_PRIORITY, NULL);
+
+    // char *request = malloc(512*sizeof(char));
+    // char *request2 = malloc(512*sizeof(char));
+
+    // buildEmonCMSRequest(request,"test1","power:100,amps:100,volts:200");
+    
+    // xTaskCreate(https_get_task, "https_get_task", 8192, request, 5, NULL);
+
+    // buildEmonCMSRequest(request2,"test2","power:150,amps:80,volts:220");
+
+    // xTaskCreate(https_get_task, "https_get_task2", 8192, request2, 5, NULL);
 }

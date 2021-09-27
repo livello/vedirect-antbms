@@ -51,3 +51,21 @@ menu "EmonCMS Configuration"
         help
             Your EmonCMS API Key.
 endmenu
+
+
+menu "MPPT Serial Configuration"
+
+    config MPPT1_RX_PIN
+        int "MPPT1 RX Pin"
+        default 4
+        help
+            The PIN where MPPT 1 RX is connected.
+
+    config MPPT2_RX_PIN
+        int "MPPT2 RX Pin"
+        default 16
+        help
+            The PIN where MPPT 2 RX is connected.
+
+endmenu
+

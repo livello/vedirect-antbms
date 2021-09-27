@@ -1,0 +1,1 @@
+void buildEmonCMSRequest (char *buffer,char *node, char *data);
