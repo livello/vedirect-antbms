@@ -23,7 +23,9 @@ void composeRequest(void){
   char *request = malloc(1024);
   getDataString(bmsData);
   buildEmonCMSRequest(request,"bms",bmsData,1024);
-  xTaskCreate(https_get_task, "https_bms", 8192, request, 5, NULL);
+  while(!enqueueRequest(request)){
+    vTaskDelay(200/portTICK_PERIOD_MS);
+  }
 }
 
 void gapCallback(esp_bt_gap_cb_event_t event, esp_bt_gap_cb_param_t *param){

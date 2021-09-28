@@ -15,7 +15,7 @@
 
 static const char *TAG = "MPPT";
 
-char *extract_ve_block(const char *str){
+char *extractVeBlock(const char *str){
   const char *i1 = strstr(str, "PID");
   if(i1 != NULL){
     const size_t pl1 = strlen("PID");
@@ -33,7 +33,7 @@ char *extract_ve_block(const char *str){
   return NULL;
 }
 
-void vSerial_read_task(void *pvParameters) {
+void vSerialReadTask(void *pvParameters) {
   const uart_config_t uart_config = {
     .baud_rate = 19200,
     .data_bits = UART_DATA_8_BITS,
@@ -57,7 +57,7 @@ void vSerial_read_task(void *pvParameters) {
     if(readBytes>0){
       rxString[readBytes]=0;
     }
-    char * veDirectString = extract_ve_block(rxString);
+    char * veDirectString = extractVeBlock(rxString);
     if(veDirectString != NULL){
       ESP_LOGI(TAG,"FOUND BLOCK");
       ve_direct_block_t *veDirectBlock = ve_direct_parse_block(veDirectString);
@@ -78,7 +78,10 @@ void vSerial_read_task(void *pvParameters) {
                   volts,current,vpv,ppv,yt,yd,mpd,cs,err);
             
         buildEmonCMSRequest(request,isMppt1?"mppt1":"mppt2",data,512);
-        xTaskCreate(https_get_task, isMppt1?"https_mppt1":"https_mppt2", 8192, request, 5, NULL);
+        //xTaskCreate(https_get_task, isMppt1?"https_mppt1":"https_mppt2", 8192, request, 5, NULL);
+        while(!enqueueRequest(request)){
+          vTaskDelay(200/portTICK_PERIOD_MS);
+        }
         vTaskDelete(NULL);
       } else {
         ESP_LOGE(TAG,"ERROR parsing block");

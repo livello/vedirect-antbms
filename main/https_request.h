@@ -1,1 +1,4 @@
-void https_get_task(void *pvParameters);
+void httpsStart();
+bool enqueueRequest(char *newRequest);
+void vHTTPSRequest(void *pvParameters);
+void httpsClose(void);

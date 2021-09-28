@@ -22,11 +22,10 @@ void app_main(void)
     ESP_ERROR_CHECK(ret);
     
     wifi_init();
+    bluetoothInit();
     
     xTaskCreate(vWatchdogTask, "watchdog_task", 1024*2, NULL, tskIDLE_PRIORITY, NULL);
-    xTaskCreate(vSerial_read_task, "mppt1_task", 8192, (void *)true, tskIDLE_PRIORITY, NULL);
-    vTaskDelay(200/portTICK_PERIOD_MS);
-    xTaskCreate(vSerial_read_task, "mppt2_task", 8192, (void *)false, tskIDLE_PRIORITY, NULL);
-    vTaskDelay(200/portTICK_PERIOD_MS);
-    bluetoothInit();
+    xTaskCreate(vSerialReadTask, "mppt1_task", 8192, (void *)true, tskIDLE_PRIORITY, NULL);
+    xTaskCreate(vSerialReadTask, "mppt2_task", 8192, (void *)false, tskIDLE_PRIORITY, NULL);
+    xTaskCreate(vHTTPSRequest, "https_request", 8192, NULL, 6, NULL);
 }
