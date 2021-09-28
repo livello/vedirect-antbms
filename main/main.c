@@ -7,7 +7,8 @@
 #include "wifi.h"
 #include "https_request.h"
 #include "emoncms_request.h"
-#include "serial.h"
+#include "mppt.h"
+#include "watchdog.h"
 
 
 void app_main(void)
@@ -21,9 +22,9 @@ void app_main(void)
     
     wifi_init();
 
-    bool mppt1=true;
-
-    xTaskCreate(serial_read_task, "serial_task", 8192, &mppt1, tskIDLE_PRIORITY, NULL);
+    xTaskCreate(vWatchdogTask, "watchdog_task", 1024*2, NULL, tskIDLE_PRIORITY, NULL);
+    xTaskCreate(vSerial_read_task, "mppt1_task", 8192, (void *)true, tskIDLE_PRIORITY, NULL);
+    xTaskCreate(vSerial_read_task, "mppt2_task", 8192, (void *)false, tskIDLE_PRIORITY, NULL);
 
     // char *request = malloc(512*sizeof(char));
     // char *request2 = malloc(512*sizeof(char));

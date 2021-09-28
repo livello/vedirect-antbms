@@ -26,6 +26,8 @@
 #include "mbedtls/certs.h"
 #include "esp_crt_bundle.h"
 
+#include "watchdog.h"
+
 
 /* Constants that aren't configurable in menuconfig */
 #define WEB_SERVER CONFIG_EMONCMS_HOSTNAME
@@ -228,5 +230,18 @@ void https_get_task(void *pvParameters)
     ESP_LOGD(TAG, "Completed %d requests", ++request_count);
     printf("Minimum free heap size: %d bytes\n", esp_get_minimum_free_heap_size());
 
+    uint8_t watchdogAdvise=0;
+    char *name = pcTaskGetName(NULL);
+    ESP_LOGI(TAG,"Task Name: %s",name);
+    if(strcmp(name,"https_mppt1")==0){
+        watchdogAdvise=1;
+    }
+    if(strcmp(name,"https_mppt2")==0){
+        watchdogAdvise=2;
+    }
+    if(strcmp(name,"https_bms")==0){
+        watchdogAdvise=3;
+    }
+    set_sent(watchdogAdvise);
     vTaskDelete(NULL);
 }
