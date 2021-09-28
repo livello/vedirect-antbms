@@ -9,6 +9,7 @@
 #include "emoncms_request.h"
 #include "mppt.h"
 #include "watchdog.h"
+#include "bluetooth.h"
 
 
 void app_main(void)
@@ -21,19 +22,11 @@ void app_main(void)
     ESP_ERROR_CHECK(ret);
     
     wifi_init();
-
+    
     xTaskCreate(vWatchdogTask, "watchdog_task", 1024*2, NULL, tskIDLE_PRIORITY, NULL);
     xTaskCreate(vSerial_read_task, "mppt1_task", 8192, (void *)true, tskIDLE_PRIORITY, NULL);
+    vTaskDelay(200/portTICK_PERIOD_MS);
     xTaskCreate(vSerial_read_task, "mppt2_task", 8192, (void *)false, tskIDLE_PRIORITY, NULL);
-
-    // char *request = malloc(512*sizeof(char));
-    // char *request2 = malloc(512*sizeof(char));
-
-    // buildEmonCMSRequest(request,"test1","power:100,amps:100,volts:200");
-    
-    // xTaskCreate(https_get_task, "https_get_task", 8192, request, 5, NULL);
-
-    // buildEmonCMSRequest(request2,"test2","power:150,amps:80,volts:220");
-
-    // xTaskCreate(https_get_task, "https_get_task2", 8192, request2, 5, NULL);
+    vTaskDelay(200/portTICK_PERIOD_MS);
+    bluetoothInit();
 }

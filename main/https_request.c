@@ -154,10 +154,10 @@ void https_get_task(void *pvParameters)
     }
 
     ESP_LOGD(TAG, "Cipher suite is %s", mbedtls_ssl_get_ciphersuite(&ssl));
-    char finalRequest[512]="";
+    char finalRequest[1024]="";
 
     snprintf(
-        finalRequest,512,
+        finalRequest,1024,
         "%sContent-Length: %d\r\nContent-Type: application/x-www-form-urlencoded\r\n\r\n%s",
         REQUEST,strlen((char *)pvParameters),(char *)pvParameters);
 
@@ -232,7 +232,7 @@ void https_get_task(void *pvParameters)
 
     uint8_t watchdogAdvise=0;
     char *name = pcTaskGetName(NULL);
-    ESP_LOGI(TAG,"Task Name: %s",name);
+
     if(strcmp(name,"https_mppt1")==0){
         watchdogAdvise=1;
     }

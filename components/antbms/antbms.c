@@ -100,3 +100,17 @@ void print_value(){
     ESP_LOGI(ANT_TAG,"Remaining Capacity = %0.1fAh",Ah_rest/1000000.0);
     ESP_LOGI(ANT_TAG,"Cycle Capacity = %0.1fAh",Ah_Total/1000000.0);
 }
+
+void getDataString (char *url){
+    snprintf(url,1024,
+        "\"C\":%d,\"SOC\":%d,\"BV\":%.0f,\"BI\":%.0f,\"P\":%d,"
+        "\"TM\":%d,\"TB\":%d,\"T1\":%d,\"T2\":%d,\"V1\":%d,\"V2\":%d,\"V3\":%d,"
+        "\"V4\":%d,\"V5\":%d,\"V6\":%d,\"V7\":%d,\"V8\":%d,\"V9\":%d,\"V10\":%d,"
+        "\"V11\":%d,\"V12\":%d,\"V13\":%d,\"V14\":%d,\"V15\":%d,\"V16\":%d,"
+        "\"AT\":%.0f,\"AR\":%.0f,\"AC\":%.0f,\"T3\":%d,\"T4\":%d,\"VMX\":%d,"
+        "\"VMN\":%d,\"VMD\":%d,\"CHGS\":%d,\"DCHS\":%d,\"BALS\":%d",
+        nbr_cell,soc,volt,amp,puiss,t_fet,t_bal,t_1,t_2,cell_1,cell_2,cell_3,cell_4,
+        cell_5,cell_6,cell_7,cell_8,cell_9,cell_10,cell_11,cell_12,cell_13,cell_14,
+        cell_15,cell_16,Ah_install,Ah_rest,Ah_Total,t_3,t_4,cell_max,cell_min,cell_av,
+        chg_status,dischg_status,balance_status);
+}

@@ -62,7 +62,7 @@ void vSerial_read_task(void *pvParameters) {
       ESP_LOGI(TAG,"FOUND BLOCK");
       ve_direct_block_t *veDirectBlock = ve_direct_parse_block(veDirectString);
       if(veDirectBlock != NULL){
-        char *request = malloc(255);
+        char *request = malloc(512);
         char *data = malloc(255);
         int volts,current,vpv,ppv,yt,yd,cs,mpd,err;
         ve_direct_get_field_int(&volts, veDirectBlock, "V");
@@ -77,7 +77,7 @@ void vSerial_read_task(void *pvParameters) {
         snprintf(data,255,"\"V\":%d,\"I\":%d,\"VPV\":%d,\"PPV\":%d,\"YT\":%d,\"YD\":%d,\"MPD\":%d,\"CS\":%d,\"ERR\":%d",
                   volts,current,vpv,ppv,yt,yd,mpd,cs,err);
             
-        buildEmonCMSRequest(request,isMppt1?"mppt1":"mppt2",data);
+        buildEmonCMSRequest(request,isMppt1?"mppt1":"mppt2",data,512);
         xTaskCreate(https_get_task, isMppt1?"https_mppt1":"https_mppt2", 8192, request, 5, NULL);
         vTaskDelete(NULL);
       } else {

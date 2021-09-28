@@ -1,1 +1,1 @@
-void buildEmonCMSRequest (char *buffer,char *node, char *data);
+void buildEmonCMSRequest (char *buffer,char *node, char *data, unsigned int size);

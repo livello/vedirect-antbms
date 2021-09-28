@@ -52,7 +52,6 @@ menu "EmonCMS Configuration"
             Your EmonCMS API Key.
 endmenu
 
-
 menu "MPPT Serial Configuration"
 
     config MPPT1_RX_PIN
@@ -69,3 +68,18 @@ menu "MPPT Serial Configuration"
 
 endmenu
 
+menu "ANTBMS Configuration"
+
+    config BMS_BT_PIN
+        string "BLUETOOTH PIN"
+        default "1234"
+        help
+            The PIN of the bluetooth classic connection.
+
+    config BMS_BT_ADDRESS
+        string "Bluetooth Address"
+        default "aa:bb:cc:a1:23:45"
+        help
+            The address of the ANTBMS classic bluetooth connection.
+
+endmenu

@@ -4,7 +4,8 @@ idf_component_register(SRCS
                       "wifi.c" 
                       "mppt.c" 
                       "watchdog.c" 
+                      "bluetooth.c" 
                       "main.c"
                     INCLUDE_DIRS "."
                     REQUIRES vedirect antbms
-                    PRIV_REQUIRES nvs_flash )
+                    PRIV_REQUIRES nvs_flash bt)
