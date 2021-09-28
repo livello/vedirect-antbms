@@ -6,5 +6,5 @@ idf_component_register(SRCS
                       "watchdog.c" 
                       "main.c"
                     INCLUDE_DIRS "."
-                    REQUIRES vedirect
+                    REQUIRES vedirect antbms
                     PRIV_REQUIRES nvs_flash )
