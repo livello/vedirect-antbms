@@ -27,11 +27,12 @@ void composeRequest(void){
     vTaskDelay(200/portTICK_PERIOD_MS);
   }
 }
-
+static const char *TAG = "BLE";
 void gapCallback(esp_bt_gap_cb_event_t event, esp_bt_gap_cb_param_t *param){
   switch(event){
     case ESP_BT_GAP_PIN_REQ_EVT:
       esp_bt_gap_pin_reply(param->pin_req.bda, true, 4, pin_code);
+      ESP_LOGD(TAG, "ESP_BT_GAP_PIN_REQ_EVT");
       break;
     default:
       break;
@@ -64,7 +65,8 @@ void sppCallback (esp_spp_cb_event_t event, esp_spp_cb_param_t *param){
   }
 }
 
-void bluetoothInit (void){ 
+void bluetoothInit (void){
+	ESP_LOGD(TAG, "bluetoothinit");
   esp_bt_controller_config_t bt_cfg = BT_CONTROLLER_INIT_CONFIG_DEFAULT();
   esp_bt_sp_param_t param_type = ESP_BT_SP_IOCAP_MODE;
   esp_bt_io_cap_t iocap = ESP_BT_IO_CAP_IN;

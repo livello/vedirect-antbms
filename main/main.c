@@ -5,10 +5,10 @@
 #include "esp_log.h"
 #include "nvs_flash.h"
 #include "wifi.h"
-#include "https_request.h"
-#include "emoncms_request.h"
-#include "mppt.h"
-#include "watchdog.h"
+//#include "https_request.h"
+//#include "emoncms_request.h"
+//#include "mppt.h"
+//#include "watchdog.h"
 #include "bluetooth.h"
 
 
@@ -24,8 +24,8 @@ void app_main(void)
     wifi_init();
     bluetoothInit();
     
-    xTaskCreate(vWatchdogTask, "watchdog_task", 1024*2, NULL, tskIDLE_PRIORITY, NULL);
-    xTaskCreate(vSerialReadTask, "mppt1_task", 8192, (void *)true, tskIDLE_PRIORITY, NULL);
-    xTaskCreate(vSerialReadTask, "mppt2_task", 8192, (void *)false, tskIDLE_PRIORITY, NULL);
-    xTaskCreate(vHTTPSRequest, "https_request", 8192, NULL, 6, NULL);
+//    xTaskCreate(vWatchdogTask, "watchdog_task", 1024*2, NULL, tskIDLE_PRIORITY, NULL);
+//    xTaskCreate(vSerialReadTask, "mppt1_task", 8192, (void *)true, tskIDLE_PRIORITY, NULL);
+//    xTaskCreate(vSerialReadTask, "mppt2_task", 8192, (void *)false, tskIDLE_PRIORITY, NULL);
+//    xTaskCreate(vHTTPSRequest, "https_request", 8192, NULL, 6, NULL);
 }
