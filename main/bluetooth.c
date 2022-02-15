@@ -22,6 +22,7 @@ void composeRequest(void){
   char *bmsData = malloc(1024);
   char *request = malloc(1024);
   getDataString(bmsData);
+  printf("%s",bmsData);
   buildEmonCMSRequest(request,"bms",bmsData,1024);
   while(!enqueueRequest(request)){
     vTaskDelay(200/portTICK_PERIOD_MS);
@@ -66,7 +67,7 @@ void sppCallback (esp_spp_cb_event_t event, esp_spp_cb_param_t *param){
 }
 
 void bluetoothInit (void){
-	ESP_LOGD(TAG, "bluetoothinit");
+	printf("bluetoothinit");
   esp_bt_controller_config_t bt_cfg = BT_CONTROLLER_INIT_CONFIG_DEFAULT();
   esp_bt_sp_param_t param_type = ESP_BT_SP_IOCAP_MODE;
   esp_bt_io_cap_t iocap = ESP_BT_IO_CAP_IN;
