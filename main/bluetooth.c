@@ -14,6 +14,10 @@
 esp_bd_addr_t bd_addr;
 static esp_bt_pin_code_t pin_code = CONFIG_BMS_BT_PIN;
 static uint8_t magic_word[8] = {0xDB, 0xDB, 0x00, 0x00, 0x00, 0x00, 0x0D, 0x0A};
+static uint8_t magic_word2[6] = {0x5A, 0x5A, 0x00, 0x00, 0x01, 0x01};
+static uint8_t magic_word3[6] = {0xDB, 0xDB, 0x00, 0x00, 0x00, 0x00};
+
+
 uint8_t message[140];
 uint8_t message_pointer = 0;
 
@@ -23,10 +27,10 @@ void composeRequest(void){
   char *request = malloc(1024);
   getDataString(bmsData);
   printf("%s",bmsData);
-  buildEmonCMSRequest(request,"bms",bmsData,1024);
-  while(!enqueueRequest(request)){
-    vTaskDelay(200/portTICK_PERIOD_MS);
-  }
+//  buildEmonCMSRequest(request,"bms",bmsData,1024);
+//  while(!enqueueRequest(request)){
+//    vTaskDelay(200/portTICK_PERIOD_MS);
+//  }
 }
 static const char *TAG = "BLE";
 void gapCallback(esp_bt_gap_cb_event_t event, esp_bt_gap_cb_param_t *param){
@@ -39,7 +43,7 @@ void gapCallback(esp_bt_gap_cb_event_t event, esp_bt_gap_cb_param_t *param){
       break;
   }
 }
-
+uint32_t my_handle;
 void sppCallback (esp_spp_cb_event_t event, esp_spp_cb_param_t *param){
   switch(event){
     case ESP_SPP_INIT_EVT:
@@ -51,16 +55,26 @@ void sppCallback (esp_spp_cb_event_t event, esp_spp_cb_param_t *param){
       }
       break;
     case ESP_SPP_OPEN_EVT:
-      esp_spp_write(param->open.handle, 8, magic_word);
+//      esp_spp_write(param->open.handle, 8, magic_word);
+//		  esp_spp_write(param->open.handle, 6, magic_word2);
+		  esp_spp_write(param->open.handle, 6, magic_word3);
+      my_handle = param->open.handle;
       break;
     case ESP_SPP_DATA_IND_EVT:
             memcpy(message+message_pointer,param->data_ind.data,param->data_ind.len);
             message_pointer += param->data_ind.len;
             if(message_pointer==140){
-                esp_spp_disconnect(param->data_ind.handle);
+//                esp_spp_disconnect(param->data_ind.handle);
                 composeRequest();
+	            printf("\n send again \n");
+	            vTaskDelay(2000/portTICK_PERIOD_MS);
+//			    esp_spp_write(param->data_ind.handle, 6, magic_word2);
+//	            esp_spp_write(my_handle, 8, magic_word);
+	            esp_spp_write(param->data_ind.handle, 6, magic_word3);
+	            printf("\n ...sent \n");
+	            break;
             }
-            break;
+
     default:
       break;
   }
