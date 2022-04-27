@@ -10,7 +10,7 @@ int nbr_cell,soc,cell_av,cell_min,cell_max,cell_1,cell_2,cell_3,cell_4,cell_5,ce
 uint8_t chg_status,dischg_status,balance_status;
 float volt,amp, Ah_install, Ah_rest, Ah_Total ;
 
-void read_values (uint8_t incomingByte[140]){
+void read_values (uint8_t incomingByte[512]){
     uint32_t tmp = ((((uint8_t)incomingByte[70])<< 24) + (((uint8_t)incomingByte[71])<< 16)+ (((uint8_t)incomingByte[72])<< 8)+ ((uint8_t)incomingByte[73]));
     if (tmp > 2147483648){amp=(-(2*2147483648)+tmp);}
     else{ amp = tmp;}

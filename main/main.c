@@ -21,7 +21,7 @@ void app_main(void)
     }
     ESP_ERROR_CHECK(ret);
     
-//    wifi_init();
+    wifi_init();
     bluetoothInit();
     
 //    xTaskCreate(vWatchdogTask, "watchdog_task", 1024*2, NULL, tskIDLE_PRIORITY, NULL);

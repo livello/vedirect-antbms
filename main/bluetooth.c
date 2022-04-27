@@ -18,19 +18,11 @@ static uint8_t magic_word2[6] = {0x5A, 0x5A, 0x00, 0x00, 0x01, 0x01};
 static uint8_t magic_word3[6] = {0xDB, 0xDB, 0x00, 0x00, 0x00, 0x00};
 
 
-uint8_t message[140];
-uint8_t message_pointer = 0;
+uint8_t message[512];
 
 void composeRequest(void){
   read_values((uint8_t *)message);
-  char *bmsData = malloc(1024);
-  char *request = malloc(1024);
-  getDataString(bmsData);
-  printf("%s",bmsData);
-//  buildEmonCMSRequest(request,"bms",bmsData,1024);
-//  while(!enqueueRequest(request)){
-//    vTaskDelay(200/portTICK_PERIOD_MS);
-//  }
+  print_value();
 }
 static const char *TAG = "BLE";
 void gapCallback(esp_bt_gap_cb_event_t event, esp_bt_gap_cb_param_t *param){
@@ -51,7 +43,7 @@ void sppCallback (esp_spp_cb_event_t event, esp_spp_cb_param_t *param){
       break;
     case ESP_SPP_DISCOVERY_COMP_EVT:
       if (param->disc_comp.status == ESP_SPP_SUCCESS) {
-        esp_spp_connect(ESP_SPP_SEC_NONE, ESP_SPP_ROLE_SLAVE, param->disc_comp.scn[0], bd_addr);
+        esp_spp_connect(ESP_SPP_SEC_NONE, ESP_SPP_ROLE_MASTER, param->disc_comp.scn[0], bd_addr);
       }
       break;
     case ESP_SPP_OPEN_EVT:
@@ -61,19 +53,16 @@ void sppCallback (esp_spp_cb_event_t event, esp_spp_cb_param_t *param){
       my_handle = param->open.handle;
       break;
     case ESP_SPP_DATA_IND_EVT:
-            memcpy(message+message_pointer,param->data_ind.data,param->data_ind.len);
-            message_pointer += param->data_ind.len;
-            if(message_pointer==140){
+            memcpy(message,param->data_ind.data,param->data_ind.len);
+		  ESP_LOGI("esp_charger", "data_ind.len=%i",param->data_ind.len);
+            if(param->data_ind.len>=100){
 //                esp_spp_disconnect(param->data_ind.handle);
                 composeRequest();
-	            printf("\n send again \n");
-	            vTaskDelay(2000/portTICK_PERIOD_MS);
-//			    esp_spp_write(param->data_ind.handle, 6, magic_word2);
-//	            esp_spp_write(my_handle, 8, magic_word);
-	            esp_spp_write(param->data_ind.handle, 6, magic_word3);
-	            printf("\n ...sent \n");
-	            break;
             }
+		  vTaskDelay(pdMS_TO_TICKS(200));
+          ESP_LOGI("esp_charger", "resend magic word");
+		  esp_spp_write(param->data_ind.handle, 8, magic_word);
+		  break;
 
     default:
       break;
